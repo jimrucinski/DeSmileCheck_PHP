@@ -1,0 +1,42 @@
+#ErrorBox{
+
+    display:block;
+    text-align:center;
+    font-size:smaller;
+    color:greenyellow;
+}
+.noBull li{list-style: none;}
+.hint{color:cornflowerblue;font-weight:bolder;font-style: oblique;}
+.add-school{width:45%;float:left;margin-right:1em;}
+.well {min-height:450px;}
+#log{font-size:x-small;}
+.logEntry{color:#333333;border-bottom:1px #cccccc solid;padding-left:1em;margin-bottom:.25em;}
+.logDate{font-style:oblique}
+legend{color:darkolivegreen;}
+.positiveMessages{width:100%;display:inline-block;color:mediumblue; text-align: center;font-weight:bolder;}
+.negativeMessages{width:100%;display:inline-block;color:darkred; text-align: center;font-weight:bolder;}
+label{text-transform: capitalize;display:inline-block;}
+
+#StudentScreeningDetails {margin-top:1.2em;}
+#StudentScreeningDetails th {background-color:cornflowerblue;color:#fafafa;}
+#StudentScreeningDetails tr:nth-child(even) {
+    background-color:#ebebeb;
+}
+
+#ReviewSchoolsTable td, th {
+  border: solid 1px black;
+  padding:.25em;
+}
+th{background-color:#000000;color:#ffffff;}
+table{width:100%;}
+tr:nth-child(even) {
+    background-color: #eeeeee;
+}
+
+@media screen and (max-width: 500px) {
+   .add-school { 
+    float: none;
+    margin-right:0;
+    width:auto;
+      
+  }

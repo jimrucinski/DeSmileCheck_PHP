@@ -1,10 +1,19 @@
 <?php
 class Screening {
     public 
-    $id,
-    $ScreeningDate,
-    $SchoolId,
-    $TotalNumberOfExams;
+    $screeningId,
+    $schoolId,
+    $totalExams,
+    $totalNumberOfStudents, 
+    $totalNumberOfFluorideTreatments,   
+    $screeningStartDate,
+    $screeningEndDate,
+    $educationStartDate,
+    $educationEndDate,
+    $totalScreeningDays,
+    $totalEducationDays,
+    $schoolContactName,
+    $schoolContactEmail;
     
     
     public function __construct(){

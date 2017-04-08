@@ -1,78 +1,53 @@
-<?php 
-    include('includes/header.php');
-    if(isset($_POST['submit'])) 
-    { 
-        $selectedSchool = $_POST['SchoolScreenings'];
-        $rows =$dbo->GetStudentsForSchools($selectedSchool);
-        $schoolScreening = explode("|", $selectedSchool);
-        $student = new Student();
-        $student->FirstName=$_POST["studentFname"];
-        $student->LastName=$_POST["studentLname"];
-        $student->Grade=$_POST["studentGrade"];
-        $student->DOB = $_POST["studentDOB"];
-        $student->StudentRace = $_POST["studentRace"];                
-        $student->StudentAllergies = $_POST["studentAllergies"];
-        $student->StudentMedicalConditions = $_POST["studentMedicalConditions"];
-        $student->ScreeningId = $schoolScreening[1];
-        $student->School=$schoolScreening[0];
+<?php include('includes/header.php'); 
 
-        $dbo->AddStudentScreening($student);
+$screening = new Screening();    
+    //$editMode=false;
 
-    
+        if($_REQUEST["id"] != "") {
+        try{
+            $screeningId = $_REQUEST["id"];
+            $rows = $dbo->GetScreeningDetails($screeningId);            
+            $schoolDets = "<td><a href=AddScreening.php?SchoolScreenings={$screeningId}>{$rows[0]['school_name']}</a></td><td>{$rows[0]['educationStartDate']}<br/>{$rows[0]['totalEducationDays']} -day(s)</td>
+            <td>{$rows[0]['screeningStartDate']}<br/>{$rows[0]['totalScreeningDays']} -day(s)</td><td>{$rows[0]['totalNumberOfStudents']}</td>
+            <td>{$rows[0]['totalNumberOfFluorideTreatments']}</td><td>{$rows[0]['totalExams']}</td><td>{$rows[0]['schoolContactName']}<br/>{$rows[0]['schoolContactEmail']}</td>";
+           
+            $students = $dbo->GetStudentsForScreening( $screeningId);
+            
+            $studentDets="";
+            foreach($students as $student){
+                $studentDets .= "<tr><td>{$student['student_lName']}, {$student['student_fName']}</td>
+                <td>{$student['immediate_care_needed']}</td><td>{$student['cavities_suspected']}</td>
+                <td>{$student['needs_cleaning']}</td>
+                <td>{$student['improve_brushing']}</td>
+                <td>{$student['regular_checkup_needed']}</td>
+                <td>{$student['exam_remarks']}</td></tr>";
+            }
+
+      
+
+        }
+       
+        catch (Exception$ex){
+
+        }
     }
-
+   
+    
 ?>
-    <form class="form-horizontal" action="<?php echo htmlentities($_SERVER['PHP_SELF']);?>" method="post">
-        
-    <div class="form-group"><label class="control-label col-sm-2" for="school">School Screening</label>
-    <div  class="col-sm-10">
-    <?php 
-        $dbo->DoQuery('call getSchoolScreenings()');
-        $rows = $dbo->resultset();
-        echo createDropdown($rows, 'SchoolScreenings', 'SchoolScreenings', isset($selectedSchool)?$selectedSchool:null, 1, 'form-control');?>
-        </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label col-sm-2" for="studentFname">First Name</label>
-            <div class="col-sm-10">
-                <input type="input" class="form-control" name="studentFname" id="studentFname">
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label col-sm-2" for="studentLname">Last Name</label>
-            <div class="col-sm-10">
-                <input type="input" class="form-control" name="studentLname" id="studentLname">
-            </div>
-        </div>
-        <div class="form-group row"><label class="control-label col-sm-2" for="studentGrade">Grade</label>
-            <div class="col-sm-10">
-            <input type="input" class="form-control" name="studentGrade" id="studetnGrade"></div>
-            </div>
-        <div class="form-group row">
-            <label class="control-label col-sm-2" for="studentDOB">Date of Birth</label>
-            <div class="col-sm-10">
-            <input type="input" class="form-control" name="studentDOB" id="studentDOB">
-            </div>
-        </div>
-        <div class="form-group row">
-            <label class="control-label col-sm-2" for="studentRace">Race</label>
-            <div class="col-sm-10">
-            <select id="studentRace" name="studentRace" class="form-control"><option/>
-            <?php
-                foreach ($races as $race){
-                    echo "<option>{$race}</option>";
-                }
-            ?>
-            </select>
-            </div>
-        </div>
-        <div class="form-group row"><label class="control-label col-sm-2" for"studentAllergies">Allergies</label>
-           <div class="col-sm-10"><textarea id="" name="studentAllergies" class="form-control"></textarea></div>
-        </div>
-        <div class="form-group row"><label class="control-label col-sm-2" for"studentMedicalConditions">Medical Conditions</label>
-           <div class="col-sm-10"> <textarea id="studentMedicalConditions" name="studentMedicalConditions" class="form-control"></textarea></div>
-        </div>
-        <div class="form-group row">
-        <div class="col-sm-10" style="text-align:center;"><input type="submit" value="add school" id="addSchool" name="submit"></div>
-        </div>
-    </form>
+<h4>Screening Information</h4>
+<table>
+    <tr><th>School</th><th>Education</th><th>Screening</th><th>Number of Students</th><th>Fluoride Treatments</th><th>Number of Exams</th><th>Contact</th></tr>
+    <tr>
+        <?php
+        echo $schoolDets;
+        ?>
+    </tr>
+    <tr>
+        <td colspan="7">
+            <table id="StudentScreeningDetails">
+            <tr><th>Student</th><th>immediate care needed</th><th>cavities suspected</th><th>needs cleaning</th><th>improve brushing</th><th>checkup needed</th><th>remarks</th></tr>
+            <?php echo $studentDets?>
+                </table>
+        </td>
+</table>
+<?php include('includes/footer.php');?>
