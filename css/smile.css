@@ -37,6 +37,6 @@ tr:nth-child(even) {
    .add-school { 
     float: none;
     margin-right:0;
-    width:auto;
-      
+    width:auto;      
   }
+}
