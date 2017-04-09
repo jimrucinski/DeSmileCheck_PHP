@@ -44,8 +44,13 @@
             $school->schoolId=$_POST['schoolId'];          
             $dbo->UpdateSchool($school);
              $positiveMessages = "'" . $school->school_name . "' updated successfullly.";
-             header('Location: ' . $_SERVER['HTTP_REFERER']);
         }
+
+         if(trim($_POST["comments"])!=""){
+            $dbo->AddSchoolComment($_POST['schoolId'], $_POST["comments"]);
+        }
+
+ 
 
         //throw new Exception('this failed miserably');
         
@@ -77,6 +82,7 @@
             <?php if(!empty($negativeMessages)){?>
             <div class="negativeMessages"> <?php echo $negativeMessages; ?></div>
             <?php } ?>
+            <div class="AddSchoolDetails">
             <div class="form-group">
                 <label class="col-lg-2 "  for="existingSchools">Existing Schools</label>
                 <div class="col-lg-10">
@@ -136,13 +142,44 @@
                     <input type="text" class="form-control phone" name="schoolPhone" id="schoolPhone"  value="<?php echo isset($school->school_phone) ? $school->school_phone : ''; ?>">
                 </div>
             </div>
-            <div class="form-group">
-                <div class="col-lg-10 col-lg-offset-2" style="text-align:center">
-                  <input type="button" name="clearme"  value="clear" id="clearme"/>  <input type="submit" value="submit" id="addSchool" name="addschool">
+            
+            
+            </div>
+            <div class="AddSchoolComments">
+               
+                <div class="form-group">
+                    <label class="control-label col-lg-10" for="comments">Comment</label>
+                    <div class="col-lg-10">
+                        <textarea class="form-control" name="comments" id="comments" rows="4"></textarea>
+                    </div>
+            </div>
+             <h5>Log</h5>
+                <div id="log" style="width:100%;height:220px;float:right;top:0;overflow:auto;">
+
+                    <?php
+                    if(isset($school->id)){
+                        $comments = $dbo->GetSchoolComments($school->id);
+                        if(sizeof($comments)>0){
+                            foreach($comments as $comment){
+                                echo "<div class='logDate'>" .  $comment["date_added"] . "</div><div class='logEntry'>" . $comment["comment"] . "</div>";
+                            }
+                          }
+                        else
+                            echo '<strong>No Log Information Found For Record.</strong>';
+                    }
+                    
+                    ?>
                 </div>
+                
+
             </div>
             
-           
+           <div>
+  
+                <div style="display:inline-block;width:100%;text-align:center;margin-top:3em;" >
+                 <input type="button" name="clearme"  value="clear" id="clearme"/>  <input type="submit" value="submit" id="addSchool" name="addschool">
+                </div>
+            </div>
         </fieldset>
         <input type="hidden" id="schoolId" name="schoolId" value="<?php echo isset($school->id) ? $school->id : ''; ?>">
  

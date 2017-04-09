@@ -33,10 +33,28 @@ tr:nth-child(even) {
     background-color: #eeeeee;
 }
 
+.AddSchoolComments{
+    float:left;
+    width:50%;
+}
+.AddSchoolDetails{
+    width:40%;
+    margin-right:2em;
+    float:left;
+}
+
 @media screen and (max-width: 500px) {
    .add-school { 
     float: none;
     margin-right:0;
     width:auto;      
   }
+  .AddSchoolComments{
+    display:block;
+    width:100%;
+}
+.AddSchoolDetails{
+    display:block;
+    width:100%;
+}
 }
